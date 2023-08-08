@@ -13,12 +13,8 @@ watch(() => [...items.value], (newVal, oldVal) => {
   console.log("new item")
   nextTick(function () {
     console.log(carousel)
-    var elem = document.getElementById('hello');
-    carousel = new Flickity(elem, {
-      // options
-      cellAlign: 'left',
-      contain: true
-    });
+    const elem = document.getElementById('hello');
+    carousel = new Flickity(elem);
   })
 })
 
@@ -31,7 +27,7 @@ function addNewitem() {
   items.value.push(newItem.value)
   // nextTick(function () {
   //   console.log(carousel)
-  //   var elem = document.getElementById('hello');
+  //   const elem = document.getElementById('hello');
   //   carousel = new Flickity(elem, {
   //     // options
   //     cellAlign: 'left',
