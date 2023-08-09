@@ -1,5 +1,14 @@
 <script setup>
 import { ref, onUpdated } from 'vue'
+// watch(() => [...items.value], (newVal, oldVal) => {
+//   console.log("new item")
+//   nextTick(function () {
+//     console.log(carousel)
+//     const elem = document.getElementById('hello');
+//     carousel = new Flickity(elem);
+//   })
+// })
+
 
 defineProps({
   msg: String,
