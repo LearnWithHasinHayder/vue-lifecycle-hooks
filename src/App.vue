@@ -1,43 +1,29 @@
 <script setup>
-import {ref, onBeforeMount, onMounted, watch, onUnmounted, onUpdated } from 'vue'
+import {ref, onBeforeMount, onMounted, onUnmounted, onUpdated } from 'vue'
 const status = ref([])
-const apiResponse = ref('')
+const apiResponse = ref(null)
 
-const watchStatus = ref([])
 onBeforeMount(() => {
   console.log('before mount')
   status.value.push('before mount')
 
   fetch('https://jsonplaceholder.typicode.com/todos/1')
     .then(response => response.json())
-    .then(json => apiResponse.value = json.title)
-
-    fetch('https://jsonplaceholder.typicode.com/todos/2')
-    .then(response => response.json())
-    .then(json => apiResponse.value = json.title)
+    .then(json => {
+      apiResponse.value = json
+    })
 })
+
+// onBeforeMount(function(){
+//   status.value.push('before mount')
+// })
 
 onMounted(() => {
   console.log('mounted')
   status.value.push('mounted')
 })
 
-watch(() => apiResponse.value, (newVal, oldVal) => {
-  console.log('watch status', newVal, oldVal)
-  watchStatus.value.push(newVal)
-})
 
-watch(() => [...status.value], (newVal, oldVal) => {
-  console.log('watch status', newVal, oldVal)
-  watchStatus.value.push(newVal)
-})
-
-
-
-// onUpdated(() => {
-//   console.log('updated')
-//   status.value.push('updated')
-// })
 </script>
 
 <template>
@@ -47,15 +33,12 @@ watch(() => [...status.value], (newVal, oldVal) => {
       <div class="w-1/2">
         <img src="//vuejs.org/assets/lifecycle.16e4c08e.png" alt="">
       </div>
-      <div class="w-1/2">
+      <div class="text-2xl w-1/2">
         {{ status }}
-        <p>
-          {{ apiResponse }}
-        </p>
-        <p>
-          {{ watchStatus }}
-        </p>
       </div>
+      <p class="mt-10">
+        {{ apiResponse  }}
+      </p>
     </div>
 
   </section>
