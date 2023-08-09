@@ -1,65 +1,38 @@
 <script setup>
-import {ref, onBeforeMount, onMounted, watch, onUnmounted, onUpdated } from 'vue'
-const status = ref([])
-const apiResponse = ref('')
+import { ref, reactive } from 'vue'
+const index = ref(0);
+const compositionHooks = [
+  'onBeforeMount',
+  'onMounted',
+  'onBeforeUpdate',
+  'onUpdated',
+  'onBeforeUnmount',
+  'onUnmounted',
+  'onErrorCaptured',
+]
 
-const watchStatus = ref([])
-onBeforeMount(() => {
-  console.log('before mount')
-  status.value.push('before mount')
-
-  fetch('https://jsonplaceholder.typicode.com/todos/1')
-    .then(response => response.json())
-    .then(json => apiResponse.value = json.title)
-
-    fetch('https://jsonplaceholder.typicode.com/todos/2')
-    .then(response => response.json())
-    .then(json => apiResponse.value = json.title)
-})
-
-onMounted(() => {
-  console.log('mounted')
-  status.value.push('mounted')
-})
-
-watch(() => apiResponse.value, (newVal, oldVal) => {
-  console.log('watch status', newVal, oldVal)
-  watchStatus.value.push(newVal)
-})
-
-watch(() => [...status.value], (newVal, oldVal) => {
-  console.log('watch status', newVal, oldVal)
-  watchStatus.value.push(newVal)
-})
-
-
-
-// onUpdated(() => {
-//   console.log('updated')
-//   status.value.push('updated')
-// })
+function nextHook(){
+  if(index.value < compositionHooks.length){
+    index.value++
+  }
+}
 </script>
 
 <template>
   <section class="mx-auto container">
-    <h1 class="my-5">Lifecycle Hooks</h1>
-    <div class="flex justify-between mt-20">
-      <div class="w-1/2">
-        <img src="//vuejs.org/assets/lifecycle.16e4c08e.png" alt="">
-      </div>
-      <div class="w-1/2">
-        {{ status }}
-        <p>
-          {{ apiResponse }}
-        </p>
-        <p>
-          {{ watchStatus }}
-        </p>
-      </div>
-    </div>
+    <h1 class="mt-10 mb-20">Lifecycle Hooks</h1>
+
+    <h2 class="my-5 text-2xl" v-for="n in index">
+      {{ compositionHooks[n - 1] }}
+    </h2>
+
+    <button class="">
+      <button @click="nextHook()" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+        Next Hook
+      </button>
+    </button>
 
   </section>
-
 </template>
 
 <style scoped></style>
