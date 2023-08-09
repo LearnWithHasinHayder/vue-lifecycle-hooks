@@ -1,5 +1,10 @@
 <script setup>
+import { ref, onUpdated } from 'vue';
 import HelloWorld from './components/HelloWorld.vue'
+const message = ref('Hello World!')
+onUpdated(() => {
+  console.log('App.vue updated!')
+})
 </script>
 
 <template>
@@ -11,6 +16,8 @@ import HelloWorld from './components/HelloWorld.vue'
       <img src="./assets/vue.svg" class="logo vue" alt="Vue logo" />
     </a>
   </div>
+  <h1>{{ message }}</h1>
+  <button @click="message='Hello From Ostad'">Update Message</button>
   <HelloWorld msg="Vite + Vue" />
 </template>
 
