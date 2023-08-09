@@ -1,9 +1,18 @@
 <script setup>
 import { ref, onUpdated } from 'vue'
-
+// watch(()=>[...dataset.value], (newVal, oldVal) => {
+//   chart.data.datasets[0].data = newVal
+//   chart.update()
+// })
 defineProps({
   msg: String,
 })
+
+// function updateChart() {
+//   dataset.push(newItem.value)
+//   chart.data.datasets[0].data = dataset
+//   chart.update()
+// }
 
 const count = ref(0)
 

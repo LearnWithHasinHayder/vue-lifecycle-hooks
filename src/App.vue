@@ -1,24 +1,13 @@
 <script setup>
-import { ref, onMounted, shallowRef, computed, onUpdated, onBeforeMount, watch, watchEffect, nextTick } from 'vue';
+import { ref, onMounted } from 'vue';
 const newItem = ref(16)
+
 let chart = null
 
-// const dataset = shallowRef([
-//   300, 50, 100
-// ])
-
-const dataset = ref([
+const dataset = [
   300, 50, 100
-])
+]
 
-watch(()=>[...dataset.value], (newVal, oldVal) => {
-  chart.data.datasets[0].data = newVal
-  chart.update()
-})
-
-function getDataSet(){
-  return dataset.value
-}
 const data = {
   labels: [
     'Red',
@@ -27,7 +16,7 @@ const data = {
   ],
   datasets: [{
     label: 'My First Dataset',
-    data: [],
+    data: dataset,
     backgroundColor: [
       'rgb(255, 99, 132)',
       'rgb(54, 162, 235)',
@@ -46,15 +35,15 @@ const config = {
 
 onMounted(() => {
   const ctx = document.getElementById('chart')
-  chart = new Chart(ctx, config);
-  chart.data.datasets[0].data = Object.assign([], getDataSet())
+  chart = new Chart(ctx, config)
 })
 
 function updateChart() {
-  dataset.value.push(newItem.value)
-  // chart.data.datasets[0].data = getDataSet()
-  // chart.update()
+  dataset.push(newItem.value)
+  chart.data.datasets[0].data = dataset
+  chart.update()
 }
+
 </script>
 
 <template>
@@ -66,7 +55,7 @@ function updateChart() {
   <div class="mt-20">
     <input type="text" v-model="newItem">
     <button @click="updateChart()" class="ml-2 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
-      Button
+      Add
     </button>
 
   </div>
