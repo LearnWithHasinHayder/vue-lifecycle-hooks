@@ -1,75 +1,65 @@
 <script setup>
-import { ref, onMounted, shallowRef, computed, onUpdated, onBeforeMount, watch, watchEffect, nextTick } from 'vue';
-const newItem = ref(16)
-let chart = null
+import {ref, onBeforeMount, onMounted, watch, onUnmounted, onUpdated } from 'vue'
+const status = ref([])
+const apiResponse = ref('')
 
-// const dataset = shallowRef([
-//   300, 50, 100
-// ])
+const watchStatus = ref([])
+onBeforeMount(() => {
+  console.log('before mount')
+  status.value.push('before mount')
 
-const dataset = ref([
-  300, 50, 100
-])
+  fetch('https://jsonplaceholder.typicode.com/todos/1')
+    .then(response => response.json())
+    .then(json => apiResponse.value = json.title)
 
-watch(()=>[...dataset.value], (newVal, oldVal) => {
-  chart.data.datasets[0].data = newVal
-  chart.update()
+    fetch('https://jsonplaceholder.typicode.com/todos/2')
+    .then(response => response.json())
+    .then(json => apiResponse.value = json.title)
 })
-
-function getDataSet(){
-  return dataset.value
-}
-const data = {
-  labels: [
-    'Red',
-    'Blue',
-    'Yellow'
-  ],
-  datasets: [{
-    label: 'My First Dataset',
-    data: [],
-    backgroundColor: [
-      'rgb(255, 99, 132)',
-      'rgb(54, 162, 235)',
-      'rgb(255, 205, 86)',
-      'rgb(43, 105, 86)',
-      'rgb(21, 21, 186)',
-    ],
-    hoverOffset: 4
-  }]
-};
-
-const config = {
-  type: 'pie',
-  data: data,
-};
 
 onMounted(() => {
-  const ctx = document.getElementById('chart')
-  chart = new Chart(ctx, config);
-  chart.data.datasets[0].data = Object.assign([], getDataSet())
+  console.log('mounted')
+  status.value.push('mounted')
 })
 
-function updateChart() {
-  dataset.value.push(newItem.value)
-  // chart.data.datasets[0].data = getDataSet()
-  // chart.update()
-}
+watch(() => apiResponse.value, (newVal, oldVal) => {
+  console.log('watch status', newVal, oldVal)
+  watchStatus.value.push(newVal)
+})
+
+watch(() => [...status.value], (newVal, oldVal) => {
+  console.log('watch status', newVal, oldVal)
+  watchStatus.value.push(newVal)
+})
+
+
+
+// onUpdated(() => {
+//   console.log('updated')
+//   status.value.push('updated')
+// })
 </script>
 
 <template>
-  <div class=" mx-auto w-[400px] h-[400px] bg-gray-400">
-    <canvas id="chart">
-    </canvas>
-  </div>
+  <section class="mx-auto container">
+    <h1 class="my-5">Lifecycle Hooks</h1>
+    <div class="flex justify-between mt-20">
+      <div class="w-1/2">
+        <img src="//vuejs.org/assets/lifecycle.16e4c08e.png" alt="">
+      </div>
+      <div class="w-1/2">
+        {{ status }}
+        <p>
+          {{ apiResponse }}
+        </p>
+        <p>
+          {{ watchStatus }}
+        </p>
+      </div>
+    </div>
 
-  <div class="mt-20">
-    <input type="text" v-model="newItem">
-    <button @click="updateChart()" class="ml-2 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
-      Button
-    </button>
+  </section>
 
-  </div>
 </template>
 
 <style scoped></style>
